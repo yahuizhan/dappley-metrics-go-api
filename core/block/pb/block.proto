@@ -1,0 +1,21 @@
+syntax = "proto3";
+package blockpb;
+import "github.com/yahuizhan/dappley-metrics-go-api/core/transaction/pb/transaction.proto";
+
+option go_package = "github.com/yahuizhan/dappley-metrics-go-api/core/block/pb";
+
+message Block{
+    BlockHeader header = 1;
+    repeated transactionpb.Transaction transactions = 2;
+    bytes parent_hash = 3;
+}
+
+message BlockHeader{
+    bytes hash = 1;
+    bytes previous_hash = 2;
+    int64 nonce = 3;
+    int64 timestamp = 4;
+    bytes signature = 5;
+    uint64 height = 6;
+    string producer = 7;
+}

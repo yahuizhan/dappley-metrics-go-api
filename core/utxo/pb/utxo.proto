@@ -1,0 +1,17 @@
+syntax = "proto3";
+package utxopb;
+
+option go_package = "github.com/yahuizhan/dappley-metrics-go-api/core/utxo/pb";
+
+message Utxo {
+    bytes   amount = 1;
+    bytes   public_key_hash = 2;
+    bytes   txid = 3;
+    uint32  tx_index = 4;
+    uint32  utxoType = 5;
+    string  contract = 6;
+}
+
+message UtxoList {
+    repeated Utxo utxos = 1;
+}

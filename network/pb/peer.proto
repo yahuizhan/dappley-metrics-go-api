@@ -1,0 +1,12 @@
+syntax = "proto3";
+package networkpb;
+
+option go_package = "github.com/yahuizhan/dappley-metrics-go-api/network/pb";
+
+message PeerInfo {
+    string id = 1;
+    repeated string address = 2;
+    oneof optional_value {
+        double latency = 3;
+    }
+}
