@@ -1,2 +1,4 @@
 /metrics_api/csv
 /metrics_api/metrics_api
+
+.DS_Store
