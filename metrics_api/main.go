@@ -47,6 +47,7 @@ func returnHistoryData(w http.ResponseWriter, r *http.Request) {
 func returnLatestData(w http.ResponseWriter, r *http.Request) {
 	//filepath := dir + "metricsInfo_result2020Nov09110626.csv"
 	filepath := dir + findLatestDataFilename(dir)
+	logger.Info(filepath)
 	miResponse := metricsreader.FormMetricsInfoResponse(filepath, 10)
 	//logger.Info(miResponse)
 	//b, _ := json.Marshal(miResponse)
