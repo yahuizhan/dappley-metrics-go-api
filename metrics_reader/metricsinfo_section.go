@@ -14,14 +14,8 @@ func NewMetricsInfoSection() *MetricsInfoSection {
 	}
 }
 
-func (miSection *MetricsInfoSection) PopulateData(consts []interface{}, plotData map[string][]interface{}) {
-	if consts != nil {
-		miSection.setConsts(consts)
-	}
-	miSection.PlotData = plotData
-}
-
-func (miSection *MetricsInfoSection) setConsts(csvData []interface{}) {
+// SetConsts sets value to MetricsInfoSection.Consts
+func (miSection *MetricsInfoSection) SetConsts(csvData []interface{}) {
 	if len(csvData) < 2 {
 		return
 	}
@@ -30,4 +24,9 @@ func (miSection *MetricsInfoSection) setConsts(csvData []interface{}) {
 	for idx, title := range titles {
 		miSection.Consts[title] = data[idx]
 	}
+}
+
+// SetPlotData sets value to MetricsInfoSection.PlotData
+func (miSection *MetricsInfoSection) SetPlotData(plotData map[string][]interface{}) {
+	miSection.PlotData = plotData
 }

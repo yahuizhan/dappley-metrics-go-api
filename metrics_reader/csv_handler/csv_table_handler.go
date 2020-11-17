@@ -145,7 +145,7 @@ func subsetArrByIndicesAndConvertToFloat(arr []string, indices []int) ([]float64
 }
 
 // AppendTimeToDataArr adds 'time' column to the beginning of dataRows
-func AppendTimeToDataArr(dataTable []interface{}) ([]interface{}, error) {
+/* func AppendTimeToDataArr(dataTable []interface{}) ([]interface{}, error) {
 	if dataTable == nil || len(dataTable) < 2 {
 		return nil, errNotEnoughDataInCSV
 	}
@@ -162,4 +162,24 @@ func AppendTimeToDataArr(dataTable []interface{}) ([]interface{}, error) {
 	}
 
 	return updated, nil
+} */
+
+// SubsetDataArrByTime keeps only rows that have time >= fromtime
+func SubsetDataArrByTime(csvArr [][]string, fromtime int) ([][]string, error) {
+	// assume first row is header and first column is time
+	if csvArr == nil || len(csvArr) < 2 {
+		return nil, errNotEnoughDataInCSV
+	}
+	res := [][]string{csvArr[0]}
+	for i := 1; i < len(csvArr); i++ {
+		row := csvArr[i]
+		time, err := strconv.Atoi(row[0])
+		if err != nil {
+			return nil, err
+		}
+		if time >= fromtime {
+			res = append(res, row)
+		}
+	}
+	return res, nil
 }

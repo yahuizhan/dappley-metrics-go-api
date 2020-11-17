@@ -207,7 +207,7 @@ func TestGetColumnsInFloat(t *testing.T) {
 	assert.Equal(t, table2Reorder, resReorder)
 }
 
-func TestAppendTimeToDataArr(t *testing.T) {
+/* func TestAppendTimeToDataArr(t *testing.T) {
 	resNil, err := AppendTimeToDataArr(nil)
 	assert.NotNil(t, err)
 	assert.Nil(t, resNil)
@@ -223,4 +223,4 @@ func TestAppendTimeToDataArr(t *testing.T) {
 	resOneCol, err := AppendTimeToDataArr(oneCol)
 	assert.Nil(t, err)
 	assert.Equal(t, oneColTime, resOneCol)
-}
+} */

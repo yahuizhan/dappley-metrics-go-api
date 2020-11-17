@@ -25,298 +25,6 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type Config struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	ConsensusConfig *ConsensusConfig `protobuf:"bytes,1,opt,name=consensus_config,json=consensusConfig,proto3" json:"consensus_config,omitempty"`
-	NodeConfig      *NodeConfig      `protobuf:"bytes,2,opt,name=node_config,json=nodeConfig,proto3" json:"node_config,omitempty"`
-}
-
-func (x *Config) Reset() {
-	*x = Config{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Config) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Config) ProtoMessage() {}
-
-func (x *Config) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Config.ProtoReflect.Descriptor instead.
-func (*Config) Descriptor() ([]byte, []int) {
-	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Config) GetConsensusConfig() *ConsensusConfig {
-	if x != nil {
-		return x.ConsensusConfig
-	}
-	return nil
-}
-
-func (x *Config) GetNodeConfig() *NodeConfig {
-	if x != nil {
-		return x.NodeConfig
-	}
-	return nil
-}
-
-type ConsensusConfig struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	MinerAddress string `protobuf:"bytes,1,opt,name=miner_address,json=minerAddress,proto3" json:"miner_address,omitempty"`
-	PrivateKey   string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
-}
-
-func (x *ConsensusConfig) Reset() {
-	*x = ConsensusConfig{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ConsensusConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ConsensusConfig) ProtoMessage() {}
-
-func (x *ConsensusConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ConsensusConfig.ProtoReflect.Descriptor instead.
-func (*ConsensusConfig) Descriptor() ([]byte, []int) {
-	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *ConsensusConfig) GetMinerAddress() string {
-	if x != nil {
-		return x.MinerAddress
-	}
-	return ""
-}
-
-func (x *ConsensusConfig) GetPrivateKey() string {
-	if x != nil {
-		return x.PrivateKey
-	}
-	return ""
-}
-
-type NodeConfig struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Port                   uint32   `protobuf:"varint,1,opt,name=port,proto3" json:"port,omitempty"`
-	Seed                   []string `protobuf:"bytes,2,rep,name=seed,proto3" json:"seed,omitempty"`
-	DbPath                 string   `protobuf:"bytes,3,opt,name=db_path,json=dbPath,proto3" json:"db_path,omitempty"`
-	RpcPort                uint32   `protobuf:"varint,4,opt,name=rpc_port,json=rpcPort,proto3" json:"rpc_port,omitempty"`
-	Key                    string   `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty"`
-	TxPoolLimit            uint32   `protobuf:"varint,6,opt,name=tx_pool_limit,json=txPoolLimit,proto3" json:"tx_pool_limit,omitempty"`
-	BlkSizeLimit           uint32   `protobuf:"varint,7,opt,name=blk_size_limit,json=blkSizeLimit,proto3" json:"blk_size_limit,omitempty"`
-	NodeAddress            string   `protobuf:"bytes,8,opt,name=node_address,json=nodeAddress,proto3" json:"node_address,omitempty"`
-	GenesisPath            string   `protobuf:"bytes,9,opt,name=genesis_path,json=genesisPath,proto3" json:"genesis_path,omitempty"`
-	MetricsPollingInterval int64    `protobuf:"varint,12,opt,name=metrics_polling_interval,json=metricsPollingInterval,proto3" json:"metrics_polling_interval,omitempty"` // seconds
-	MetricsInterval        int64    `protobuf:"varint,13,opt,name=metrics_interval,json=metricsInterval,proto3" json:"metrics_interval,omitempty"`                        // seconds
-}
-
-func (x *NodeConfig) Reset() {
-	*x = NodeConfig{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *NodeConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NodeConfig) ProtoMessage() {}
-
-func (x *NodeConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NodeConfig.ProtoReflect.Descriptor instead.
-func (*NodeConfig) Descriptor() ([]byte, []int) {
-	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *NodeConfig) GetPort() uint32 {
-	if x != nil {
-		return x.Port
-	}
-	return 0
-}
-
-func (x *NodeConfig) GetSeed() []string {
-	if x != nil {
-		return x.Seed
-	}
-	return nil
-}
-
-func (x *NodeConfig) GetDbPath() string {
-	if x != nil {
-		return x.DbPath
-	}
-	return ""
-}
-
-func (x *NodeConfig) GetRpcPort() uint32 {
-	if x != nil {
-		return x.RpcPort
-	}
-	return 0
-}
-
-func (x *NodeConfig) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *NodeConfig) GetTxPoolLimit() uint32 {
-	if x != nil {
-		return x.TxPoolLimit
-	}
-	return 0
-}
-
-func (x *NodeConfig) GetBlkSizeLimit() uint32 {
-	if x != nil {
-		return x.BlkSizeLimit
-	}
-	return 0
-}
-
-func (x *NodeConfig) GetNodeAddress() string {
-	if x != nil {
-		return x.NodeAddress
-	}
-	return ""
-}
-
-func (x *NodeConfig) GetGenesisPath() string {
-	if x != nil {
-		return x.GenesisPath
-	}
-	return ""
-}
-
-func (x *NodeConfig) GetMetricsPollingInterval() int64 {
-	if x != nil {
-		return x.MetricsPollingInterval
-	}
-	return 0
-}
-
-func (x *NodeConfig) GetMetricsInterval() int64 {
-	if x != nil {
-		return x.MetricsInterval
-	}
-	return 0
-}
-
-type DynastyConfig struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Producers    []string `protobuf:"bytes,1,rep,name=producers,proto3" json:"producers,omitempty"`
-	MaxProducers uint32   `protobuf:"varint,2,opt,name=max_producers,json=maxProducers,proto3" json:"max_producers,omitempty"`
-}
-
-func (x *DynastyConfig) Reset() {
-	*x = DynastyConfig{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DynastyConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DynastyConfig) ProtoMessage() {}
-
-func (x *DynastyConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DynastyConfig.ProtoReflect.Descriptor instead.
-func (*DynastyConfig) Descriptor() ([]byte, []int) {
-	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *DynastyConfig) GetProducers() []string {
-	if x != nil {
-		return x.Producers
-	}
-	return nil
-}
-
-func (x *DynastyConfig) GetMaxProducers() uint32 {
-	if x != nil {
-		return x.MaxProducers
-	}
-	return 0
-}
-
 type CliConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -329,7 +37,7 @@ type CliConfig struct {
 func (x *CliConfig) Reset() {
 	*x = CliConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[4]
+		mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -342,7 +50,7 @@ func (x *CliConfig) String() string {
 func (*CliConfig) ProtoMessage() {}
 
 func (x *CliConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[4]
+	mi := &file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -355,7 +63,7 @@ func (x *CliConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CliConfig.ProtoReflect.Descriptor instead.
 func (*CliConfig) Descriptor() ([]byte, []int) {
-	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{4}
+	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CliConfig) GetPort() uint32 {
@@ -379,58 +87,15 @@ var file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawD
 	0x75, 0x69, 0x7a, 0x68, 0x61, 0x6e, 0x2f, 0x64, 0x61, 0x70, 0x70, 0x6c, 0x65, 0x79, 0x2d, 0x6d,
 	0x65, 0x74, 0x72, 0x69, 0x63, 0x73, 0x2d, 0x67, 0x6f, 0x2d, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f,
 	0x6e, 0x66, 0x69, 0x67, 0x2f, 0x70, 0x62, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x70, 0x62, 0x22, 0x85,
-	0x01, 0x0a, 0x06, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x44, 0x0a, 0x10, 0x63, 0x6f, 0x6e,
-	0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x70, 0x62, 0x2e, 0x43,
-	0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x0f,
-	0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12,
-	0x35, 0x0a, 0x0b, 0x6e, 0x6f, 0x64, 0x65, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x70, 0x62, 0x2e,
-	0x4e, 0x6f, 0x64, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x0a, 0x6e, 0x6f, 0x64, 0x65,
-	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x57, 0x0a, 0x0f, 0x43, 0x6f, 0x6e, 0x73, 0x65, 0x6e,
-	0x73, 0x75, 0x73, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x69, 0x6e,
-	0x65, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x0c, 0x6d, 0x69, 0x6e, 0x65, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1f,
-	0x0a, 0x0b, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x22,
-	0xef, 0x02, 0x0a, 0x0a, 0x4e, 0x6f, 0x64, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x12,
-	0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x70, 0x6f,
-	0x72, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x65, 0x65, 0x64, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09,
-	0x52, 0x04, 0x73, 0x65, 0x65, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x64, 0x62, 0x5f, 0x70, 0x61, 0x74,
-	0x68, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x64, 0x62, 0x50, 0x61, 0x74, 0x68, 0x12,
-	0x19, 0x0a, 0x08, 0x72, 0x70, 0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x0d, 0x52, 0x07, 0x72, 0x70, 0x63, 0x50, 0x6f, 0x72, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
-	0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x22, 0x0a, 0x0d,
-	0x74, 0x78, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x06, 0x20,
-	0x01, 0x28, 0x0d, 0x52, 0x0b, 0x74, 0x78, 0x50, 0x6f, 0x6f, 0x6c, 0x4c, 0x69, 0x6d, 0x69, 0x74,
-	0x12, 0x24, 0x0a, 0x0e, 0x62, 0x6c, 0x6b, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x5f, 0x6c, 0x69, 0x6d,
-	0x69, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x62, 0x6c, 0x6b, 0x53, 0x69, 0x7a,
-	0x65, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x6e, 0x6f, 0x64, 0x65, 0x5f, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6e, 0x6f,
-	0x64, 0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x67, 0x65, 0x6e,
-	0x65, 0x73, 0x69, 0x73, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0b, 0x67, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x61, 0x74, 0x68, 0x12, 0x38, 0x0a, 0x18,
-	0x6d, 0x65, 0x74, 0x72, 0x69, 0x63, 0x73, 0x5f, 0x70, 0x6f, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x5f,
-	0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x03, 0x52, 0x16,
-	0x6d, 0x65, 0x74, 0x72, 0x69, 0x63, 0x73, 0x50, 0x6f, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x49, 0x6e,
-	0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x12, 0x29, 0x0a, 0x10, 0x6d, 0x65, 0x74, 0x72, 0x69, 0x63,
-	0x73, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x03,
-	0x52, 0x0f, 0x6d, 0x65, 0x74, 0x72, 0x69, 0x63, 0x73, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61,
-	0x6c, 0x22, 0x52, 0x0a, 0x0d, 0x44, 0x79, 0x6e, 0x61, 0x73, 0x74, 0x79, 0x43, 0x6f, 0x6e, 0x66,
-	0x69, 0x67, 0x12, 0x1c, 0x0a, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x65, 0x72, 0x73, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x65, 0x72, 0x73,
-	0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x61, 0x78, 0x5f, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x65, 0x72,
-	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x6d, 0x61, 0x78, 0x50, 0x72, 0x6f, 0x64,
-	0x75, 0x63, 0x65, 0x72, 0x73, 0x22, 0x3b, 0x0a, 0x09, 0x43, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66,
-	0x69, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d,
-	0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
-	0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
-	0x72, 0x64, 0x42, 0x37, 0x5a, 0x35, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x79, 0x61, 0x68, 0x75, 0x69, 0x7a, 0x68, 0x61, 0x6e, 0x2f, 0x64, 0x61, 0x70, 0x70, 0x6c,
-	0x65, 0x79, 0x2d, 0x6d, 0x65, 0x74, 0x72, 0x69, 0x63, 0x73, 0x2d, 0x67, 0x6f, 0x2d, 0x61, 0x70,
-	0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x70, 0x62, 0x22, 0x3b,
+	0x0a, 0x09, 0x43, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x70,
+	0x6f, 0x72, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x12,
+	0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x37, 0x5a, 0x35, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x79, 0x61, 0x68, 0x75, 0x69, 0x7a,
+	0x68, 0x61, 0x6e, 0x2f, 0x64, 0x61, 0x70, 0x70, 0x6c, 0x65, 0x79, 0x2d, 0x6d, 0x65, 0x74, 0x72,
+	0x69, 0x63, 0x73, 0x2d, 0x67, 0x6f, 0x2d, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -445,22 +110,16 @@ func file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_raw
 	return file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDescData
 }
 
-var file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_goTypes = []interface{}{
-	(*Config)(nil),          // 0: configpb.Config
-	(*ConsensusConfig)(nil), // 1: configpb.ConsensusConfig
-	(*NodeConfig)(nil),      // 2: configpb.NodeConfig
-	(*DynastyConfig)(nil),   // 3: configpb.DynastyConfig
-	(*CliConfig)(nil),       // 4: configpb.CliConfig
+	(*CliConfig)(nil), // 0: configpb.CliConfig
 }
 var file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_depIdxs = []int32{
-	1, // 0: configpb.Config.consensus_config:type_name -> configpb.ConsensusConfig
-	2, // 1: configpb.Config.node_config:type_name -> configpb.NodeConfig
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_init() }
@@ -470,54 +129,6 @@ func file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_ini
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Config); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ConsensusConfig); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NodeConfig); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DynastyConfig); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CliConfig); i {
 			case 0:
 				return &v.state
@@ -536,7 +147,7 @@ func file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_ini
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_github_com_yahuizhan_dappley_metrics_go_api_config_pb_config_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -20,17 +20,15 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var CurrCSVFilename string = ""
-
 // RunMetricsReader requests metrics info every 5 seconds and writes into csv
-func RunMetricsReader(cliConfig *configpb.CliConfig) {
+func RunMetricsReader(config *configpb.CliConfig) {
 
-	conn := initRPCClient(int(cliConfig.GetPort()))
+	conn := initRPCClient(int(config.GetPort()))
 	defer conn.Close()
 
 	metricsRPCService := rpcpb.NewMetricServiceClient(conn)
 
-	md := metadata.Pairs("password", cliConfig.GetPassword())
+	md := metadata.Pairs("password", config.GetPassword())
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	getMetricsInfo(ctx, metricsRPCService)
 }
@@ -62,7 +60,7 @@ func getMetricsInfo(ctx context.Context, c interface{}) {
 				}
 				return
 			}
-			//logger.Info("metricsInfo:", metricsInfoResponse.Data)
+			logger.Info("Received metricsInfoResponse!")
 
 			m, ok := gjson.Parse(metricsInfoResponse.Data).Value().(map[string]interface{})
 			if !ok {
@@ -76,7 +74,7 @@ func getMetricsInfo(ctx context.Context, c interface{}) {
 
 			today := time.Now().Format("20060102")
 			filepath := "csv/metricsInfo_result" + today + ".csv"
-			saveToCSV(filepath, metricsInfoMap)
+			saveToCSV(filepath, metricsInfoMap, time.Now().Unix())
 		}
 	}
 }
@@ -99,7 +97,7 @@ func formCSVRecord(jsonObj map[string]interface{}, titlePrefix string, metricsIn
 				if isIntegral(v) {
 					metricsInfoMap[prefix] = strconv.Itoa(int(v))
 				} else {
-					metricsInfoMap[prefix] = fmt.Sprintf("%.2f", v)
+					metricsInfoMap[prefix] = fmt.Sprintf("%.4f", v)
 				}
 			default:
 				formCSVRecord(v.(map[string]interface{}), prefix, metricsInfoMap)
@@ -109,7 +107,7 @@ func formCSVRecord(jsonObj map[string]interface{}, titlePrefix string, metricsIn
 }
 
 // assume header of csv file is sorted
-func saveToCSV(csvFilepath string, metricsInfoMap map[string]string) {
+func saveToCSV(csvFilepath string, metricsInfoMap map[string]string, time int64) {
 	var (
 		columnTitles []string // will define order of incoming data
 		file         *os.File // csv file to be written to
@@ -117,6 +115,9 @@ func saveToCSV(csvFilepath string, metricsInfoMap map[string]string) {
 
 	mapKeys := getMapKeys(metricsInfoMap)
 	sort.Strings(mapKeys)
+	mapKeys = append([]string{"time"}, mapKeys...)
+	metricsInfoMap["time"] = strconv.Itoa(int(time))
+
 	if csvhandler.IsCSVExistAndNonEmpty(csvFilepath) {
 		csvData, err := csvhandler.ReadCSV(csvFilepath)
 		if err != nil {
@@ -130,6 +131,7 @@ func saveToCSV(csvFilepath string, metricsInfoMap map[string]string) {
 			colsToAdd := csvhandler.ArrDifference(mapKeys, headerline)
 			if len(colsToAdd) > 0 { // metricsInfoMap has columns that are not found in csv
 				columnTitles = csvhandler.ArrUnionSorted(mapKeys, headerline)
+				columnTitles = putElementToArrStart(columnTitles, "time")
 				newTable, _ := csvhandler.GenerateTableByTitles(csvData, columnTitles)
 				file = csvhandler.CreateNewCSVWithTable(csvFilepath, newTable)
 			} else { // csv has all columns of metricsInfoMap
@@ -177,4 +179,22 @@ func getMapKeys(m map[string]string) []string {
 		res = append(res, k)
 	}
 	return res
+}
+
+func putElementToArrStart(arr []string, element string) []string {
+	// find first appearance of element in arr and put it to start of arr, with other elements' order unchanged
+	// if element cannot be found in arr, return arr itself
+	res := []string{element}
+	foundElement := false
+	for _, e := range arr {
+		if e == element && !foundElement {
+			foundElement = true
+		} else {
+			res = append(res, e)
+		}
+	}
+	if foundElement {
+		return res
+	}
+	return arr
 }
