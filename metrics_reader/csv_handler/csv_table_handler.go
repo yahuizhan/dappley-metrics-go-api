@@ -144,26 +144,6 @@ func subsetArrByIndicesAndConvertToFloat(arr []string, indices []int) ([]float64
 	return res, nil
 }
 
-// AppendTimeToDataArr adds 'time' column to the beginning of dataRows
-/* func AppendTimeToDataArr(dataTable []interface{}) ([]interface{}, error) {
-	if dataTable == nil || len(dataTable) < 2 {
-		return nil, errNotEnoughDataInCSV
-	}
-
-	updated := []interface{}{}
-	titleRow := dataTable[0].([]string)
-	titleRow = append([]string{"time"}, titleRow...)
-	updated = append(updated, titleRow)
-
-	for i := 1; i < len(dataTable); i++ {
-		row := dataTable[i].([]float64)
-		row = append([]float64{float64(5 * (i - 1))}, row...)
-		updated = append(updated, row)
-	}
-
-	return updated, nil
-} */
-
 // SubsetDataArrByTime keeps only rows that have time >= fromtime
 func SubsetDataArrByTime(csvArr [][]string, fromtime int) ([][]string, error) {
 	// assume first row is header and first column is time
