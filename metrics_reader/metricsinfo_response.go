@@ -55,7 +55,6 @@ type MetricsInfoResponse struct {
 	Success    bool                           `json:"success"`
 	ErrMessage string                         `json:"error"`
 	Data       map[string]*MetricsInfoSection `json:"data"`
-	TimeRange  []string                       `json:"timeRange"`
 }
 
 // NewFailMetricsInfoResponse initializes a failure response with given errMessage
@@ -64,7 +63,6 @@ func NewFailMetricsInfoResponse(errMessage string) *MetricsInfoResponse {
 		Success:    false,
 		ErrMessage: errMessage,
 		Data:       nil,
-		TimeRange:  nil,
 	}
 }
 
@@ -74,7 +72,6 @@ func FormMetricsInfoResponse(filepath string, limit int, fromtime int) *MetricsI
 		Success:    false,
 		ErrMessage: "",
 		Data:       make(map[string]*MetricsInfoSection),
-		TimeRange:  nil,
 	}
 
 	allRecords, err := csvhandler.ReadCSV(filepath)
@@ -101,8 +98,6 @@ func FormMetricsInfoResponse(filepath string, limit int, fromtime int) *MetricsI
 	} else {
 		records = allRecords
 	}
-
-	response.TimeRange = findTimeRange(records)
 
 	for _, sec := range allSections {
 		response.Data[sec] = NewMetricsInfoSection()
@@ -140,11 +135,4 @@ func (response *MetricsInfoResponse) formResponseData(csvArr [][]string) error {
 	}
 
 	return nil
-}
-
-func findTimeRange(csvArr [][]string) []string {
-	// get upper and lower limit from first column; assume csvArr is ordered and 1st row is header
-	res := []string{csvArr[1][0]}
-	res = append(res, csvArr[len(csvArr)-1][0])
-	return res
 }

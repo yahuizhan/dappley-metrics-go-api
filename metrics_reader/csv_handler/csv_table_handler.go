@@ -78,7 +78,7 @@ func findIdxInArr(elem string, arr []string) int {
 	return -1
 }
 
-// GetColumnsInFloat subsets csvTable by columnTitles and convert all data values to float64
+// GetColumnsInFloat subsets csvTable by columnTitles and convert all data values to *float64
 // if some element in columnTitles does not exist in csvTable, it is ignored
 func GetColumnsInFloat(csvTable [][]string, columnTitles []string) ([]interface{}, error) {
 	// subset csvTable to keep only columnTitles and convert data values to float64
@@ -123,21 +123,21 @@ func removeFirstPrefix(title string, delim string) string {
 }
 
 // subset 'arr' by indices given in 'indices'; if index in 'indices' is out of range of 'arr', it gets ignored
-func subsetArrByIndicesAndConvertToFloat(arr []string, indices []int) ([]float64, error) {
+func subsetArrByIndicesAndConvertToFloat(arr []string, indices []int) ([]*float64, error) {
 	if arr == nil {
 		return nil, errArrNil
 	}
-	res := []float64{}
+	res := []*float64{}
 	for _, i := range indices {
 		if i >= 0 && i < len(arr) {
 			if strings.TrimSpace(arr[i]) == "" {
-				res = append(res, -1)
+				res = append(res, nil)
 			} else {
 				converted, err := strconv.ParseFloat(arr[i], 64)
 				if err != nil {
 					return nil, err
 				}
-				res = append(res, converted)
+				res = append(res, &converted)
 			}
 		}
 	}

@@ -27,7 +27,7 @@ func main() {
 	cliConfig := &configpb.CliConfig{}
 	config.LoadConfig(filePath, cliConfig)
 
-	go metricsreader.RunMetricsReader(cliConfig)
+	//go metricsreader.RunMetricsReader(cliConfig)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/getLatest/{fromtime}", returnLatestData).Methods("GET", "OPTIONS")

@@ -20,9 +20,16 @@ func (miSection *MetricsInfoSection) SetConsts(csvData []interface{}) {
 		return
 	}
 	titles := csvData[0].([]string)
-	data := csvData[1].([]float64)
-	for idx, title := range titles {
-		miSection.Consts[title] = data[idx]
+	for i := 1; i < len(csvData); i++ {
+		dataRow := csvData[i].([]*float64)
+		for idx, title := range titles {
+			if dataRow[idx] != nil {
+				miSection.Consts[title] = *(dataRow[idx])
+			}
+		}
+		if len(miSection.Consts) == len(titles) {
+			break
+		}
 	}
 }
 
