@@ -100,7 +100,7 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestArrDifference(t *testing.T) {
+/* func TestArrDifference(t *testing.T) {
 	assert.Equal(t, []string{}, ArrDifference([]string{}, []string{}))
 	assert.Equal(t, []string{}, ArrDifference([]string{}, []string{"1"}))
 	assert.Equal(t, []string{"1"}, ArrDifference([]string{"1"}, []string{}))
@@ -108,7 +108,7 @@ func TestArrDifference(t *testing.T) {
 	assert.Equal(t, []string{}, ArrDifference([]string{"3", "2"}, []string{"1", "2", "3"}))
 	assert.Equal(t, []string{"1", "4"}, ArrDifference([]string{"3", "2", "1", "4"}, []string{"2", "3"}))
 	assert.Equal(t, []string{"5"}, ArrDifference([]string{"5", "1", "3"}, []string{"1", "2", "3"}))
-}
+} */
 
 func TestFindIdxInArr(t *testing.T) {
 	assert.Equal(t, -1, findIdxInArr("1", []string{}))
@@ -118,7 +118,7 @@ func TestFindIdxInArr(t *testing.T) {
 	assert.Equal(t, 3, findIdxInArr("2", []string{"3", "1", "1", "2"}))
 }
 
-func TestArrUnionSorted(t *testing.T) {
+/* func TestArrUnionSorted(t *testing.T) {
 	assert.Equal(t, []string{}, ArrUnionSorted([]string{}, []string{}))
 	assert.Equal(t, []string{"1"}, ArrUnionSorted([]string{}, []string{"1"}))
 	assert.Equal(t, []string{"1"}, ArrUnionSorted([]string{"1"}, []string{}))
@@ -126,7 +126,7 @@ func TestArrUnionSorted(t *testing.T) {
 	assert.Equal(t, []string{"1", "2", "3"}, ArrUnionSorted([]string{"3", "2"}, []string{"1", "2", "3"}))
 	assert.Equal(t, []string{"1", "2", "3", "4"}, ArrUnionSorted([]string{"3", "2", "1", "4"}, []string{"2", "3"}))
 	assert.Equal(t, []string{"1", "2", "3", "5"}, ArrUnionSorted([]string{"5", "1", "3"}, []string{"1", "2", "3"}))
-}
+} */
 
 func TestGenerateTableByTitles(t *testing.T) {
 	newTable0, err := GenerateTableByTitles(nil, []string{"col2", "col1", "col3"})

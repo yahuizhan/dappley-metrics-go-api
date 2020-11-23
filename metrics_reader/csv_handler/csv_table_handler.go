@@ -2,7 +2,6 @@ package csvhandler
 
 import (
 	"errors"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -13,7 +12,7 @@ var (
 )
 
 // ArrDifference computes A - B
-func ArrDifference(a, b []string) []string {
+/* func ArrDifference(a, b []string) []string {
 	diff := []string{}
 
 	m := make(map[string]bool)
@@ -27,15 +26,15 @@ func ArrDifference(a, b []string) []string {
 		}
 	}
 	return diff
-}
+} */
 
 // ArrUnionSorted computes A + B
-func ArrUnionSorted(a, b []string) (union []string) {
+/* func ArrUnionSorted(a, b []string) (union []string) {
 	diff := ArrDifference(a, b)
 	union = append(b, diff...)
 	sort.Strings(union)
 	return union
-}
+} */
 
 // GenerateTableByTitles generates a new table based on columnTitles and data in oldTable
 // if columnTitles is a subset of oldTable's titles, return the subset of oldTable based on columnTitles

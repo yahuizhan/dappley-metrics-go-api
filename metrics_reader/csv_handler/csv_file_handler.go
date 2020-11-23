@@ -7,6 +7,7 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// ReadCSV reads the entire csv file at filepath
 func ReadCSV(filepath string) ([][]string, error) {
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -18,6 +19,7 @@ func ReadCSV(filepath string) ([][]string, error) {
 	return csvReader.ReadAll()
 }
 
+// IsCSVExistAndNonEmpty checks if file at filepath exists and not empty
 func IsCSVExistAndNonEmpty(filepath string) bool {
 	stat, err := os.Stat(filepath)
 	if os.IsNotExist(err) || stat.Size() == 0 {
@@ -26,6 +28,7 @@ func IsCSVExistAndNonEmpty(filepath string) bool {
 	return true
 }
 
+// CreateNewCSVWithTitles creates new csv file at filepath and writes header to it
 func CreateNewCSVWithTitles(filepath string, colTitles []string) *os.File {
 	file, err := os.Create(filepath)
 	if err != nil {
@@ -38,7 +41,7 @@ func CreateNewCSVWithTitles(filepath string, colTitles []string) *os.File {
 	return file
 }
 
-func CreateNewCSVWithTable(filepath string, newTable [][]string) *os.File {
+/* func CreateNewCSVWithTable(filepath string, newTable [][]string) *os.File {
 	file, err := os.Create(filepath)
 	if err != nil {
 		logger.Panic("cannot create a csv file for Error: " + err.Error())
@@ -47,7 +50,7 @@ func CreateNewCSVWithTable(filepath string, newTable [][]string) *os.File {
 	writer.Comma = ','
 	writer.WriteAll(newTable)
 	return file
-}
+} */
 
 /* func GetCSVHeader(filepath string) ([]string, error) {
 	file, err := os.Open(filepath)

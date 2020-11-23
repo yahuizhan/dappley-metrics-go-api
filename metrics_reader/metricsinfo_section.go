@@ -1,16 +1,16 @@
 package metricsreader
 
-// MetricsInfoSection formulates data in a way that is easy to plot using Google Charts
+// MetricsInfoSection formulates data in a way that is easy to plot
 type MetricsInfoSection struct {
-	Consts   map[string]float64       `json:"consts"`
-	PlotData map[string][]interface{} `json:"plotData"`
+	Consts   map[string]float64   `json:"consts"`
+	PlotInfo map[string]*PlotData `json:"plotInfo"`
 }
 
 // NewMetricsInfoSection initializes a new object of MetricsInfoSection
 func NewMetricsInfoSection() *MetricsInfoSection {
 	return &MetricsInfoSection{
 		Consts:   make(map[string]float64),
-		PlotData: nil,
+		PlotInfo: nil,
 	}
 }
 
@@ -34,6 +34,20 @@ func (miSection *MetricsInfoSection) SetConsts(csvData []interface{}) {
 }
 
 // SetPlotData sets value to MetricsInfoSection.PlotData
-func (miSection *MetricsInfoSection) SetPlotData(plotData map[string][]interface{}) {
-	miSection.PlotData = plotData
+func (miSection *MetricsInfoSection) SetPlotData(plotData map[string]*PlotData) {
+	miSection.PlotInfo = plotData
+}
+
+// PlotData contains title and data of one plot
+type PlotData struct {
+	Title string        `json:"title"`
+	Data  []interface{} `json:"data"`
+}
+
+// NewPlotData returns a pointer to a new PlotData
+func NewPlotData(title string, data []interface{}) *PlotData {
+	return &PlotData{
+		Title: title,
+		Data:  data,
+	}
 }

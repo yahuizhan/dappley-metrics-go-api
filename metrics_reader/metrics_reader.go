@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
-	"sort"
 	"strconv"
 	"time"
 
@@ -21,35 +20,64 @@ import (
 )
 
 // RunMetricsReader requests metrics info every 5 seconds and writes into csv
-func RunMetricsReader(config *configpb.CliConfig) {
+func RunMetricsReader(config *configpb.MetricsConfig) {
 
-	conn := initRPCClient(int(config.GetPort()))
+	conn := initRPCClient(config.GetHost(), int(config.GetPort()))
 	defer conn.Close()
 
 	metricsRPCService := rpcpb.NewMetricServiceClient(conn)
 
 	md := metadata.Pairs("password", config.GetPassword())
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
-	getMetricsInfo(ctx, metricsRPCService)
+	csvCols := config.GetMetricsinfoCsvColumns()
+	getMetricsInfo(ctx, metricsRPCService, csvCols)
 }
 
-func initRPCClient(port int) *grpc.ClientConn {
+func initRPCClient(host string, port int) *grpc.ClientConn {
 	//prepare grpc account
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(fmt.Sprint(":", port), grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprint(host+":", port), grpc.WithInsecure())
 	if err != nil {
 		logger.Panic("Error:", err.Error())
 	}
+	logger.Infof("Connected to %v:%v", host, port)
 	return conn
 }
 
-func getMetricsInfo(ctx context.Context, c interface{}) {
+func getMetricsInfo(ctx context.Context, c rpcpb.MetricServiceClient, csvCols []string) {
+	// set up csv file to store metricsInfo
+	today := time.Now().Format("20060102")
+	filepath := "csv/metricsInfo_result" + today + ".csv"
+	var file *os.File
+	var err error
+	if csvhandler.IsCSVExistAndNonEmpty(filepath) {
+		file, err = os.OpenFile(filepath, os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			logger.Panic("Error:", err.Error())
+		}
+		writer := csv.NewWriter(file)
+		emptyLine := make([]string, len(csvCols))
+		for idx, col := range csvCols {
+			if col == "time" {
+				emptyLine[idx] = strconv.Itoa(int(time.Now().Unix()))
+			} else {
+				emptyLine[idx] = ""
+			}
+		}
+		writer.Write(emptyLine)
+		writer.Flush()
+	} else {
+		file = csvhandler.CreateNewCSVWithTitles(filepath, csvCols)
+	}
+	defer file.Close()
+
+	// requesting metricsInfo every 5s and save to csv
 	tick := time.NewTicker(time.Duration(5000) * time.Millisecond)
 	for {
 		select {
 		case <-tick.C:
 			metricsServiceRequest := rpcpb.MetricsServiceRequest{}
-			metricsInfoResponse, err := c.(rpcpb.MetricServiceClient).RpcGetMetricsInfo(ctx, &metricsServiceRequest)
+			metricsInfoResponse, err := c.RpcGetMetricsInfo(ctx, &metricsServiceRequest)
 			if err != nil {
 				switch status.Code(err) {
 				case codes.Unavailable:
@@ -60,6 +88,7 @@ func getMetricsInfo(ctx context.Context, c interface{}) {
 				}
 				return
 			}
+			timeNow := time.Now().Unix()
 			logger.Info("Received metricsInfoResponse!")
 
 			m, ok := gjson.Parse(metricsInfoResponse.Data).Value().(map[string]interface{})
@@ -69,12 +98,11 @@ func getMetricsInfo(ctx context.Context, c interface{}) {
 			}
 
 			metricsInfoMap := make(map[string]string)
+			metricsInfoMap["time"] = strconv.Itoa(int(timeNow))
 			formCSVRecord(m, "", metricsInfoMap) // add error handling
 			//printMap(metricsInfoMap)
 
-			today := time.Now().Format("20060102")
-			filepath := "csv/metricsInfo_result" + today + ".csv"
-			saveToCSV(filepath, metricsInfoMap, time.Now().Unix())
+			saveToCSV(file, metricsInfoMap, csvCols)
 		}
 	}
 }
@@ -97,7 +125,7 @@ func formCSVRecord(jsonObj map[string]interface{}, titlePrefix string, metricsIn
 				if isIntegral(v) {
 					metricsInfoMap[prefix] = strconv.Itoa(int(v))
 				} else {
-					metricsInfoMap[prefix] = fmt.Sprintf("%.4f", v)
+					metricsInfoMap[prefix] = fmt.Sprintf("%.2f", v)
 				}
 			default:
 				formCSVRecord(v.(map[string]interface{}), prefix, metricsInfoMap)
@@ -107,50 +135,8 @@ func formCSVRecord(jsonObj map[string]interface{}, titlePrefix string, metricsIn
 }
 
 // assume header of csv file is sorted
-func saveToCSV(csvFilepath string, metricsInfoMap map[string]string, time int64) {
-	var (
-		columnTitles []string // will define order of incoming data
-		file         *os.File // csv file to be written to
-	)
-
-	mapKeys := getMapKeys(metricsInfoMap)
-	sort.Strings(mapKeys)
-	mapKeys = append([]string{"time"}, mapKeys...)
-	metricsInfoMap["time"] = strconv.Itoa(int(time))
-
-	if csvhandler.IsCSVExistAndNonEmpty(csvFilepath) {
-		csvData, err := csvhandler.ReadCSV(csvFilepath)
-		if err != nil {
-			logger.Panic("cannot read csv file for Error: " + err.Error())
-		}
-		if len(csvData) < 2 { // csv file only contains header line: overwrite it
-			columnTitles = mapKeys
-			file = csvhandler.CreateNewCSVWithTitles(csvFilepath, columnTitles)
-		} else {
-			headerline := csvData[0]
-			colsToAdd := csvhandler.ArrDifference(mapKeys, headerline)
-			if len(colsToAdd) > 0 { // metricsInfoMap has columns that are not found in csv
-				columnTitles = csvhandler.ArrUnionSorted(mapKeys, headerline)
-				columnTitles = putElementToArrStart(columnTitles, "time")
-				newTable, _ := csvhandler.GenerateTableByTitles(csvData, columnTitles)
-				file = csvhandler.CreateNewCSVWithTable(csvFilepath, newTable)
-			} else { // csv has all columns of metricsInfoMap
-				file, err = os.OpenFile(csvFilepath, os.O_WRONLY|os.O_APPEND, 0666)
-				columnTitles = headerline
-			}
-			if err != nil {
-				logger.Panic("cannot open csv file for Error: " + err.Error())
-			}
-		}
-	} else {
-		columnTitles = mapKeys
-		file = csvhandler.CreateNewCSVWithTitles(csvFilepath, columnTitles)
-	}
-
-	defer file.Close()
+func saveToCSV(file *os.File, metricsInfoMap map[string]string, columnTitles []string) {
 	writer := csv.NewWriter(file)
-	writer.Comma = ','
-	// write new data to csv
 	var metricsInfostr []string
 	for _, col := range columnTitles {
 		metricsInfostr = append(metricsInfostr, metricsInfoMap[col])
@@ -168,33 +154,4 @@ func printMap(m map[string]string) {
 
 func isIntegral(val float64) bool {
 	return val == float64(int(val))
-}
-
-func getMapKeys(m map[string]string) []string {
-	if m == nil {
-		return nil
-	}
-	var res []string
-	for k := range m {
-		res = append(res, k)
-	}
-	return res
-}
-
-func putElementToArrStart(arr []string, element string) []string {
-	// find first appearance of element in arr and put it to start of arr, with other elements' order unchanged
-	// if element cannot be found in arr, return arr itself
-	res := []string{element}
-	foundElement := false
-	for _, e := range arr {
-		if e == element && !foundElement {
-			foundElement = true
-		} else {
-			res = append(res, e)
-		}
-	}
-	if foundElement {
-		return res
-	}
-	return arr
 }

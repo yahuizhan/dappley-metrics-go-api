@@ -24,10 +24,10 @@ func main() {
 	flag.StringVar(&filePath, "f", "default.conf", "CLI config file path")
 	flag.Parse()
 
-	cliConfig := &configpb.CliConfig{}
-	config.LoadConfig(filePath, cliConfig)
+	metricsConfig := &configpb.MetricsConfig{}
+	config.LoadConfig(filePath, metricsConfig)
 
-	//go metricsreader.RunMetricsReader(cliConfig)
+	go metricsreader.RunMetricsReader(metricsConfig)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/getLatest/{fromtime}", returnLatestData).Methods("GET", "OPTIONS")
@@ -43,7 +43,7 @@ func returnHistoryData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["filename"]
 	filepath := dir + filename
-	miResponse := metricsreader.FormMetricsInfoResponse(filepath, 0, 0)
+	miResponse := metricsreader.FormMetricsInfoResponse(filepath, 0)
 	json.NewEncoder(w).Encode(miResponse)
 }
 
@@ -59,7 +59,7 @@ func returnLatestData(w http.ResponseWriter, r *http.Request) {
 		failresponse := metricsreader.NewFailMetricsInfoResponse(err.Error())
 		json.NewEncoder(w).Encode(failresponse)
 	}
-	miResponse := metricsreader.FormMetricsInfoResponse(filepath, 0, from)
+	miResponse := metricsreader.FormMetricsInfoResponse(filepath, from)
 	json.NewEncoder(w).Encode(miResponse)
 }
 
@@ -67,6 +67,9 @@ func returnListDataFiles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	filenames, _ := findCSVFiles(dir)
+	/* response := make(map[string]interface{})
+	response["success"] = true
+	response["data"] = filenames */
 	json.NewEncoder(w).Encode(filenames)
 }
 
