@@ -27,19 +27,23 @@ func main() {
 	metricsConfig := &configpb.MetricsConfig{}
 	config.LoadConfig(filePath, metricsConfig)
 
-	go metricsreader.RunMetricsReader(metricsConfig)
+	//go metricsreader.RunMetricsReader(metricsConfig)
 
 	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/", returnConnSuccess).Methods("GET", "OPTIONS")
 	router.HandleFunc("/getLatest/{fromtime}", returnLatestData).Methods("GET", "OPTIONS")
 	router.HandleFunc("/getHistory/{filename}", returnHistoryData).Methods("GET", "OPTIONS")
 	router.HandleFunc("/getListOfDataFiles", returnListDataFiles).Methods("GET", "OPTIONS")
 
 	logger.Fatalln(http.ListenAndServe(":9000", router))
 }
+func returnConnSuccess(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	json.NewEncoder(w).Encode("API is up!")
+}
 
 func returnHistoryData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	vars := mux.Vars(r)
 	filename := vars["filename"]
 	filepath := dir + filename
@@ -49,7 +53,6 @@ func returnHistoryData(w http.ResponseWriter, r *http.Request) {
 
 func returnLatestData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	vars := mux.Vars(r)
 	fromtime := vars["fromtime"]
 	filepath := dir + findLatestDataFilename(dir)
@@ -64,7 +67,6 @@ func returnLatestData(w http.ResponseWriter, r *http.Request) {
 
 func returnListDataFiles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	filenames, _ := findCSVFiles(dir)
 	json.NewEncoder(w).Encode(filenames)
 }
