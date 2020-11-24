@@ -11,31 +11,6 @@ var (
 	errArrNil             error = errors.New("subsetArrByIndicesAndConvertToFloat: cannot subset nil array")
 )
 
-// ArrDifference computes A - B
-/* func ArrDifference(a, b []string) []string {
-	diff := []string{}
-
-	m := make(map[string]bool)
-	for _, item := range b {
-		m[item] = true
-	}
-
-	for _, item := range a {
-		if !(m[item]) {
-			diff = append(diff, item)
-		}
-	}
-	return diff
-} */
-
-// ArrUnionSorted computes A + B
-/* func ArrUnionSorted(a, b []string) (union []string) {
-	diff := ArrDifference(a, b)
-	union = append(b, diff...)
-	sort.Strings(union)
-	return union
-} */
-
 // GenerateTableByTitles generates a new table based on columnTitles and data in oldTable
 // if columnTitles is a subset of oldTable's titles, return the subset of oldTable based on columnTitles
 // if columnTitles contains extra columns not found in oldTable, add the columns and assign "" as values

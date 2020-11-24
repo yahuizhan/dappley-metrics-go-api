@@ -34,7 +34,6 @@ func RunMetricsReader(config *configpb.MetricsConfig) {
 }
 
 func initRPCClient(host string, port int) *grpc.ClientConn {
-	//prepare grpc account
 	var conn *grpc.ClientConn
 	conn, err := grpc.Dial(fmt.Sprint(host+":", port), grpc.WithInsecure())
 	if err != nil {

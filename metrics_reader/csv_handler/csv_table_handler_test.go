@@ -16,9 +16,9 @@ var (
 	table2Float   []interface{}
 	table2Subset  []interface{}
 	table2Reorder []interface{}
-	table2Time    []interface{}
-	oneCol        []interface{}
-	oneColTime    []interface{}
+	table3        [][]string
+	table3Subset1 [][]string
+	table3Subset2 [][]string
 	invalidTable  [][]string
 )
 
@@ -72,43 +72,29 @@ func TestMain(m *testing.M) {
 		[]float64{23, 21.2},
 		[]float64{33.3, 31},
 	}
-	table2Time = []interface{}{
-		[]string{"time", "col1", "col2", "col3"},
-		[]float64{0, 11.1, 12, 13},
-		[]float64{5, 21.2, 22, 23},
-		[]float64{10, 31, 32, 33.3},
+	table3 = [][]string{
+		{"time", "col1"},
+		{"1", "11.1"},
+		{"2", "21.2"},
+		{"3", "31"},
 	}
-	oneCol = []interface{}{
-		[]string{"col1"},
-		[]float64{11.1},
-		[]float64{21.2},
-		[]float64{31},
+	table3Subset1 = [][]string{
+		{"time", "col1"},
+		{"2", "21.2"},
+		{"3", "31"},
 	}
-	oneColTime = []interface{}{
-		[]string{"time", "col1"},
-		[]float64{0, 11.1},
-		[]float64{5, 21.2},
-		[]float64{10, 31},
+	table3Subset2 = [][]string{
+		{"time", "col1"},
 	}
 	invalidTable = [][]string{
-		{"pre:col1", "pre:col2", "pre:col3"},
-		{"11.1", "1a", "13"},
-		{"21.2", "22", "23"},
-		{"31", "32", "33.3f"},
+		{"time", "pre:col2", "pre:col3"},
+		{"11", "1a", "13.1"},
+		{"21", "22.2", "23"},
+		{"31bb", "32", "33.3f"},
 	}
 	code := m.Run()
 	os.Exit(code)
 }
-
-/* func TestArrDifference(t *testing.T) {
-	assert.Equal(t, []string{}, ArrDifference([]string{}, []string{}))
-	assert.Equal(t, []string{}, ArrDifference([]string{}, []string{"1"}))
-	assert.Equal(t, []string{"1"}, ArrDifference([]string{"1"}, []string{}))
-	assert.Equal(t, []string{"3", "4"}, ArrDifference([]string{"3", "4"}, []string{"1", "2"}))
-	assert.Equal(t, []string{}, ArrDifference([]string{"3", "2"}, []string{"1", "2", "3"}))
-	assert.Equal(t, []string{"1", "4"}, ArrDifference([]string{"3", "2", "1", "4"}, []string{"2", "3"}))
-	assert.Equal(t, []string{"5"}, ArrDifference([]string{"5", "1", "3"}, []string{"1", "2", "3"}))
-} */
 
 func TestFindIdxInArr(t *testing.T) {
 	assert.Equal(t, -1, findIdxInArr("1", []string{}))
@@ -117,16 +103,6 @@ func TestFindIdxInArr(t *testing.T) {
 	assert.Equal(t, -1, findIdxInArr("5", []string{"3", "1", "1", "2"}))
 	assert.Equal(t, 3, findIdxInArr("2", []string{"3", "1", "1", "2"}))
 }
-
-/* func TestArrUnionSorted(t *testing.T) {
-	assert.Equal(t, []string{}, ArrUnionSorted([]string{}, []string{}))
-	assert.Equal(t, []string{"1"}, ArrUnionSorted([]string{}, []string{"1"}))
-	assert.Equal(t, []string{"1"}, ArrUnionSorted([]string{"1"}, []string{}))
-	assert.Equal(t, []string{"1", "2", "3", "4"}, ArrUnionSorted([]string{"4", "3"}, []string{"1", "2"}))
-	assert.Equal(t, []string{"1", "2", "3"}, ArrUnionSorted([]string{"3", "2"}, []string{"1", "2", "3"}))
-	assert.Equal(t, []string{"1", "2", "3", "4"}, ArrUnionSorted([]string{"3", "2", "1", "4"}, []string{"2", "3"}))
-	assert.Equal(t, []string{"1", "2", "3", "5"}, ArrUnionSorted([]string{"5", "1", "3"}, []string{"1", "2", "3"}))
-} */
 
 func TestGenerateTableByTitles(t *testing.T) {
 	newTable0, err := GenerateTableByTitles(nil, []string{"col2", "col1", "col3"})
@@ -149,28 +125,42 @@ func TestGenerateTableByTitles(t *testing.T) {
 func TestSubsetArrByIndicesAndConvertToFloat(t *testing.T) {
 	res1, err := subsetArrByIndicesAndConvertToFloat([]string{}, nil)
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{}, res1)
+	assert.Equal(t, []*float64{}, res1)
 	res2, err := subsetArrByIndicesAndConvertToFloat(nil, []int{})
 	assert.Nil(t, res2)
 	assert.NotNil(t, err)
 	res3, err := subsetArrByIndicesAndConvertToFloat([]string{}, []int{})
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{}, res3)
+	assert.Equal(t, []*float64{}, res3)
 	res4, err := subsetArrByIndicesAndConvertToFloat([]string{"13.1", "13.2", "14"}, []int{0, 1, 2})
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{13.1, 13.2, 14}, res4)
+	//assert.Equal(t, []float64{13.1, 13.2, 14}, res4)
+	assert.Equal(t, 3, len(res4))
+	assert.Equal(t, 13.1, *(res4[0]))
+	assert.Equal(t, 13.2, *(res4[1]))
+	assert.Equal(t, float64(14), *(res4[2]))
 	res5, err := subsetArrByIndicesAndConvertToFloat([]string{"13.1", "13.2", "14"}, []int{0, 1})
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{13.1, 13.2}, res5)
+	//assert.Equal(t, []float64{13.1, 13.2}, res5)
+	assert.Equal(t, 2, len(res5))
+	assert.Equal(t, 13.1, *(res5[0]))
+	assert.Equal(t, 13.2, *(res5[1]))
 	res6, err := subsetArrByIndicesAndConvertToFloat([]string{"13.1", "13.2", "14"}, []int{2, 0})
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{14, 13.1}, res6)
+	//assert.Equal(t, []float64{14, 13.1}, res6)
+	assert.Equal(t, 2, len(res6))
+	assert.Equal(t, float64(14), *(res6[0]))
+	assert.Equal(t, 13.1, *(res6[1]))
 	res7, err := subsetArrByIndicesAndConvertToFloat([]string{"13.1", "13.2", "14"}, []int{2, 3})
 	assert.Nil(t, err)
-	assert.Equal(t, []float64{14}, res7)
+	assert.Equal(t, 1, len(res7))
+	assert.Equal(t, float64(14), *(res7[0]))
 	res8, err := subsetArrByIndicesAndConvertToFloat([]string{"13.1", "abc", "14"}, []int{1, 2})
 	assert.Nil(t, res8)
 	assert.NotNil(t, err)
+	res9, err := subsetArrByIndicesAndConvertToFloat([]string{"", ""}, []int{0})
+	assert.Nil(t, err)
+	assert.Equal(t, []*float64{(*float64)(nil)}, res9)
 }
 
 func TestGetColumnsInFloat(t *testing.T) {
@@ -184,7 +174,7 @@ func TestGetColumnsInFloat(t *testing.T) {
 
 	resNotExist, err := GetColumnsInFloat(table2, []string{"col4", "col5"})
 	assert.Nil(t, err)
-	assert.Equal(t, []interface{}{[]string{}, []float64{}, []float64{}, []float64{}}, resNotExist)
+	assert.Equal(t, []interface{}{[]string{}, []*float64{}, []*float64{}, []*float64{}}, resNotExist)
 
 	resInvalid, err := GetColumnsInFloat(invalidTable, []string{"pre:col1", "pre:col2", "pre:col3"})
 	assert.NotNil(t, err)
@@ -192,35 +182,57 @@ func TestGetColumnsInFloat(t *testing.T) {
 
 	res, err := GetColumnsInFloat(table2, []string{"col1", "col2", "col3"})
 	assert.Nil(t, err)
-	assert.Equal(t, table2Float, res)
+	//assert.Equal(t, table2Float, res)
+	compareTables(t, table2Float, res)
 
 	resSubset, err := GetColumnsInFloat(table2, []string{"col1", "col3"})
 	assert.Nil(t, err)
-	assert.Equal(t, table2Subset, resSubset)
+	//assert.Equal(t, table2Subset, resSubset)
+	compareTables(t, table2Subset, resSubset)
 
 	resSubsetNotExist, err := GetColumnsInFloat(table2, []string{"col1", "col4", "col3"})
 	assert.Nil(t, err)
-	assert.Equal(t, table2Subset, resSubsetNotExist)
+	//assert.Equal(t, table2Subset, resSubsetNotExist)
+	compareTables(t, table2Subset, resSubsetNotExist)
 
 	resReorder, err := GetColumnsInFloat(table2, []string{"col3", "col1"})
 	assert.Nil(t, err)
-	assert.Equal(t, table2Reorder, resReorder)
+	//assert.Equal(t, table2Reorder, resReorder)
+	compareTables(t, table2Reorder, resReorder)
 }
 
-/* func TestAppendTimeToDataArr(t *testing.T) {
-	resNil, err := AppendTimeToDataArr(nil)
-	assert.NotNil(t, err)
-	assert.Nil(t, resNil)
+func compareTables(t *testing.T, expected []interface{}, actual []interface{}) {
+	assert.Equal(t, len(expected), len(actual))
+	assert.True(t, len(actual) > 1)
+	assert.Equal(t, expected[0], actual[0])
 
-	resEmpty, err := AppendTimeToDataArr([]interface{}{})
-	assert.NotNil(t, err)
-	assert.Nil(t, resEmpty)
+	for i := 1; i < len(expected); i++ {
+		var rowExpected []float64 = expected[i].([]float64)
+		var rowActual []*float64 = actual[i].([]*float64)
+		for j, v := range rowActual {
+			assert.Equal(t, rowExpected[j], *v)
+		}
+	}
+}
 
-	res, err := AppendTimeToDataArr(table2Float)
+func TestSubsetDataArrByTime(t *testing.T) {
+	subset1, err := SubsetDataArrByTime(table3, 2)
 	assert.Nil(t, err)
-	assert.Equal(t, table2Time, res)
+	assert.Equal(t, table3Subset1, subset1)
 
-	resOneCol, err := AppendTimeToDataArr(oneCol)
+	subset2, err := SubsetDataArrByTime(table3, 5)
 	assert.Nil(t, err)
-	assert.Equal(t, oneColTime, resOneCol)
-} */
+	assert.Equal(t, table3Subset2, subset2)
+
+	nilData, err := SubsetDataArrByTime(nil, 2)
+	assert.Nil(t, nilData)
+	assert.NotNil(t, err)
+
+	insuffData, err := SubsetDataArrByTime(table3Subset2, 2)
+	assert.Nil(t, insuffData)
+	assert.NotNil(t, err)
+
+	invalidData, err := SubsetDataArrByTime(invalidTable, 2)
+	assert.Nil(t, invalidData)
+	assert.NotNil(t, err)
+}

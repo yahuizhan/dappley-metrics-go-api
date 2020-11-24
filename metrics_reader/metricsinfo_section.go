@@ -2,15 +2,15 @@ package metricsreader
 
 // MetricsInfoSection formulates data in a way that is easy to plot
 type MetricsInfoSection struct {
-	Consts   map[string]float64   `json:"consts"`
-	PlotInfo map[string]*PlotData `json:"plotInfo"`
+	Consts map[string]float64 `json:"consts"`
+	Plots  []*PlotData        `json:"plots"`
 }
 
 // NewMetricsInfoSection initializes a new object of MetricsInfoSection
 func NewMetricsInfoSection() *MetricsInfoSection {
 	return &MetricsInfoSection{
-		Consts:   make(map[string]float64),
-		PlotInfo: nil,
+		Consts: make(map[string]float64),
+		Plots:  nil,
 	}
 }
 
@@ -34,8 +34,8 @@ func (miSection *MetricsInfoSection) SetConsts(csvData []interface{}) {
 }
 
 // SetPlotData sets value to MetricsInfoSection.PlotData
-func (miSection *MetricsInfoSection) SetPlotData(plotData map[string]*PlotData) {
-	miSection.PlotInfo = plotData
+func (miSection *MetricsInfoSection) SetPlotData(plotData []*PlotData) {
+	miSection.Plots = plotData
 }
 
 // PlotData contains title and data of one plot

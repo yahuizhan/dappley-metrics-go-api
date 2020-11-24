@@ -12,44 +12,42 @@ var constantFieldsMap = map[string][]string{
 }
 
 type plotInfo struct {
-	name       string   // name of plot
-	title      string   // title shown above plot
-	csvColumns []string // columns from csv to be plotted, ordered as x, y1, y2, ...
+	title      string   // plot title
+	csvColumns []string // data columns from csv to be plotted, ordered as x, y1, y2, ...
 }
 
 var plotDataMap = map[string][]plotInfo{
 	"block": {
-		plotInfo{"txAddToBlockCost", "Cost for Adding Transaction To Block", []string{"block:height", "block:txAddToBlockCost"}},
-		plotInfo{"txPoolSize", "Size of Transaction Pool", []string{"block:height", "block:txPoolSize"}},
+		plotInfo{"Cost for Adding Transaction To Block", []string{"block:height", "block:txAddToBlockCost"}},
+		plotInfo{"Size of Transaction Pool", []string{"block:height", "block:txPoolSize"}},
 	},
 	"cpu": {
-		plotInfo{"currentProcessCpuPercent", "CPU Percentage of Current Process", []string{"time", "cpu:currentProcessCpuPercent"}},
-		plotInfo{"totalProcessCpuPercent", "Total CPU Percentage of All Processes", []string{"time", "cpu:totalProcessCpuPercent"}},
+		plotInfo{"CPU Percentage of Current Process", []string{"time", "cpu:currentProcessCpuPercent"}},
+		plotInfo{"Total CPU Percentage of All Processes", []string{"time", "cpu:totalProcessCpuPercent"}},
 	},
 	"disk": {
-		plotInfo{"used", "Disk Used", []string{"time", "disk:used"}},
-		plotInfo{"UsedChange", "Change In Disk Used", []string{"time", "disk:UsedChange"}},
-		plotInfo{"usedPercent", "Percentage Of Disk Used", []string{"time", "disk:usedPercent"}},
-		plotInfo{"readBytes", "Bytes Read from Disk", []string{"time", "disk:readBytes"}},
-		plotInfo{"writeBytes", "Bytes Written to Disk", []string{"time", "disk:writeBytes"}},
+		plotInfo{"Bytes Read from Disk", []string{"time", "disk:readBytes"}},
+		plotInfo{"Bytes Written to Disk", []string{"time", "disk:writeBytes"}},
+		plotInfo{"Disk Used", []string{"time", "disk:used"}},
+		plotInfo{"Percentage Of Disk Used", []string{"time", "disk:usedPercent"}},
+		plotInfo{"Change In Disk Used", []string{"time", "disk:UsedChange"}},
 	},
 	"memory": {
-		plotInfo{"currentProcessMemInUse", "Memory In Use By Current Process", []string{"time", "memory:currentProcessMemInUse"}},
-		plotInfo{"currentProcessMemPercent", "Memory Percentage Used By Current Process", []string{"time", "memory:currentProcessMemPercent"}},
-		plotInfo{"totalProcessMemInUse", "Total Memory In Use By All Processes", []string{"time", "memory:totalProcessMemInUse"}},
-		plotInfo{"totalProcessMemPercent", "Total Memory Percentage Used By All Processes", []string{"time", "memory:totalProcessMemPercent"}},
+		plotInfo{"Memory In Use By Current Process", []string{"time", "memory:currentProcessMemInUse"}},
+		plotInfo{"Memory Percentage Used By Current Process", []string{"time", "memory:currentProcessMemPercent"}},
+		plotInfo{"Total Memory In Use By All Processes", []string{"time", "memory:totalProcessMemInUse"}},
+		plotInfo{"Total Memory Percentage Used By All Processes", []string{"time", "memory:totalProcessMemPercent"}},
 	},
 	"network": {
-		plotInfo{"connection", "Number of Network Connections", []string{"time", "network:connectionTypeInNum", "network:connectionTypeOutNum"}},
-		//plotInfo{"bytes", "Bytes Transferred through Network", []string{"time", "network:bytesSent", "network:bytesRecv"}},
-		plotInfo{"bytesSent", "Bytes Sent through Network", []string{"time", "network:bytesSent"}},
-		plotInfo{"bytesRecv", "Bytes Received through Network", []string{"time", "network:bytesRecv"}},
-		plotInfo{"packets", "Packets Transferred through Network", []string{"time", "network:packetsSent", "network:packetsRecv"}},
+		plotInfo{"Bytes Sent through Network", []string{"time", "network:bytesSent"}},
+		plotInfo{"Bytes Received through Network", []string{"time", "network:bytesRecv"}},
+		plotInfo{"Packets Transferred through Network", []string{"time", "network:packetsSent", "network:packetsRecv"}},
+		plotInfo{"Number of Network Connections", []string{"time", "network:connectionTypeInNum", "network:connectionTypeOutNum"}},
 	},
 	"txRequest": {
-		plotInfo{"concurrent", "Number of Concurrent Transaction Requests", []string{"time", "txRequest:txRequestSend:concurrent", "txRequest:txRequestSendFromMiner:concurrent"}},
-		plotInfo{"costTime", "Cost Time of Transaction Requests", []string{"time", "txRequest:txRequestSend:costTime", "txRequest:txRequestSendFromMiner:costTime"}},
-		//plotInfo{"qps", "Queries Per Second(QPS) of Transaction Requests", []string{"time", "txRequest:txRequestSend:qps", "txRequest:txRequestSendFromMiner:qps"}},
+		plotInfo{"Number of Concurrent Transaction Requests", []string{"time", "txRequest:txRequestSend:concurrent", "txRequest:txRequestSendFromMiner:concurrent"}},
+		plotInfo{"Cost Time of Transaction Requests", []string{"time", "txRequest:txRequestSend:costTime", "txRequest:txRequestSendFromMiner:costTime"}},
+		//plotInfo{"Queries Per Second(QPS) of Transaction Requests", []string{"time", "txRequest:txRequestSend:qps", "txRequest:txRequestSendFromMiner:qps"}},
 	},
 }
 
@@ -121,13 +119,13 @@ func (response *MetricsInfoResponse) formResponseData(csvArr [][]string) error {
 			response.Content[section].SetConsts(constants)
 		}
 
-		allPlotData := make(map[string]*PlotData)
-		for _, plotinfo := range plotInfoArr {
+		allPlotData := make([]*PlotData, len(plotInfoArr))
+		for idx, plotinfo := range plotInfoArr {
 			onePlotData, err := csvhandler.GetColumnsInFloat(csvArr, plotinfo.csvColumns)
 			if err != nil {
 				return err
 			}
-			allPlotData[plotinfo.name] = NewPlotData(plotinfo.title, onePlotData)
+			allPlotData[idx] = NewPlotData(plotinfo.title, onePlotData)
 		}
 		response.Content[section].SetPlotData(allPlotData)
 	}

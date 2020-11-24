@@ -53,7 +53,6 @@ func returnLatestData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fromtime := vars["fromtime"]
 	filepath := dir + findLatestDataFilename(dir)
-	//logger.Info(filepath)
 	from, err := strconv.Atoi(fromtime)
 	if err != nil {
 		failresponse := metricsreader.NewFailMetricsInfoResponse(err.Error())
@@ -67,9 +66,6 @@ func returnListDataFiles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	filenames, _ := findCSVFiles(dir)
-	/* response := make(map[string]interface{})
-	response["success"] = true
-	response["data"] = filenames */
 	json.NewEncoder(w).Encode(filenames)
 }
 
