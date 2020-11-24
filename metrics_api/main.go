@@ -27,7 +27,7 @@ func main() {
 	metricsConfig := &configpb.MetricsConfig{}
 	config.LoadConfig(filePath, metricsConfig)
 
-	//go metricsreader.RunMetricsReader(metricsConfig)
+	go metricsreader.RunMetricsReader(metricsConfig)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", returnConnSuccess).Methods("GET", "OPTIONS")
