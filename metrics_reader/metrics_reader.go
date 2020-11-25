@@ -44,6 +44,10 @@ func initRPCClient(host string, port int) *grpc.ClientConn {
 }
 
 func getMetricsInfo(ctx context.Context, c rpcpb.MetricServiceClient, csvCols []string) {
+	// create csv/ if it does not exist
+	if _, err := os.Stat("csv/"); os.IsNotExist(err) {
+		_ = os.Mkdir("csv/", 0777)
+	}
 	// set up csv file to store metricsInfo
 	today := time.Now().Format("20060102")
 	filepath := "csv/metricsInfo_result" + today + ".csv"
