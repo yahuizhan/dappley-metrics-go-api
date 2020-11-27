@@ -37,6 +37,7 @@ func main() {
 
 	logger.Fatalln(http.ListenAndServe(":9000", router))
 }
+
 func returnConnSuccess(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode("API is up!")
