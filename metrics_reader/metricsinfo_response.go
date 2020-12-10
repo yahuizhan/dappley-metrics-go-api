@@ -8,7 +8,7 @@ var allSections []string = []string{"Block", "CPU", "Disk", "Memory", "Network",
 
 type constantInfo struct {
 	title     string // title of the constant field
-	unitType  string // unit type of plot; can be one of {"number", "bytes", "percentage"}
+	unitType  string // unit type of a constant; can be one of {"number", "bytes", "percentage"}
 	csvColumn string // data column from csv to get data
 }
 
