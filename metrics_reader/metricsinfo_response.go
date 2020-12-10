@@ -4,7 +4,7 @@ import (
 	csvhandler "github.com/yahuizhan/dappley-metrics-go-api/metrics_reader/csv_handler"
 )
 
-var allSections []string = []string{"block", "cpu", "disk", "memory", "network", "txRequest"}
+var allSections []string = []string{"Block", "CPU", "Disk", "Memory", "Network", "Transaction Request"}
 
 var constantFieldsMap = map[string][]string{
 	"cpu":    {"cpu:totalCoreNum"},
@@ -18,34 +18,34 @@ type plotInfo struct {
 }
 
 var plotDataMap = map[string][]plotInfo{
-	"block": {
+	"Block": {
 		plotInfo{"Cost for Adding Transaction To Block", "number", []string{"block:height", "block:txAddToBlockCost"}},
 		plotInfo{"Size of Transaction Pool", "number", []string{"block:height", "block:txPoolSize"}},
 	},
-	"cpu": {
+	"CPU": {
 		plotInfo{"CPU Percentage of Current Process", "percentage", []string{"time", "cpu:currentProcessCpuPercent"}},
 		plotInfo{"Total CPU Percentage of All Processes", "percentage", []string{"time", "cpu:totalProcessCpuPercent"}},
 	},
-	"disk": {
+	"Disk": {
 		plotInfo{"Bytes Read from Disk", "bytes", []string{"time", "disk:readBytes"}},
 		plotInfo{"Bytes Written to Disk", "bytes", []string{"time", "disk:writeBytes"}},
 		plotInfo{"Disk Used", "bytes", []string{"time", "disk:used"}},
 		plotInfo{"Percentage Of Disk Used", "percentage", []string{"time", "disk:usedPercent"}},
 		plotInfo{"Change In Disk Used", "number", []string{"time", "disk:UsedChange"}},
 	},
-	"memory": {
+	"Memory": {
 		plotInfo{"Memory In Use By Current Process", "bytes", []string{"time", "memory:currentProcessMemInUse"}},
 		plotInfo{"Memory Percentage Used By Current Process", "percentage", []string{"time", "memory:currentProcessMemPercent"}},
 		plotInfo{"Total Memory In Use By All Processes", "bytes", []string{"time", "memory:totalProcessMemInUse"}},
 		plotInfo{"Total Memory Percentage Used By All Processes", "percentage", []string{"time", "memory:totalProcessMemPercent"}},
 	},
-	"network": {
+	"Network": {
 		plotInfo{"Bytes Sent through Network", "bytes", []string{"time", "network:bytesSent"}},
 		plotInfo{"Bytes Received through Network", "bytes", []string{"time", "network:bytesRecv"}},
 		plotInfo{"Packets Transferred through Network", "number", []string{"time", "network:packetsSent", "network:packetsRecv"}},
 		plotInfo{"Number of Network Connections", "number", []string{"time", "network:connectionTypeInNum", "network:connectionTypeOutNum"}},
 	},
-	"txRequest": {
+	"Transaction Request": {
 		plotInfo{"Number of Concurrent Transaction Requests", "number", []string{"time", "txRequest:txRequestSend:concurrent", "txRequest:txRequestSendFromMiner:concurrent"}},
 		plotInfo{"Cost Time of Transaction Requests", "number", []string{"time", "txRequest:txRequestSend:costTime", "txRequest:txRequestSendFromMiner:costTime"}},
 		//plotInfo{"Queries Per Second(QPS) of Transaction Requests", "number", []string{"time", "txRequest:txRequestSend:qps", "txRequest:txRequestSendFromMiner:qps"}},
@@ -83,7 +83,6 @@ func FormMetricsInfoResponse(filepath string, fromtime int) *MetricsInfoResponse
 		return response
 	}
 
-	// save only the last "limit" number of records
 	var records [][]string
 	if fromtime > 0 {
 		records, err = csvhandler.SubsetDataArrByTime(allRecords, fromtime)
