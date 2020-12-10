@@ -40,14 +40,16 @@ func (miSection *MetricsInfoSection) SetPlotData(plotData []*PlotData) {
 
 // PlotData contains title and data of one plot
 type PlotData struct {
-	Title string        `json:"title"`
-	Data  []interface{} `json:"data"`
+	Title    string        `json:"title"`
+	UnitType string        `json:"unitType"`
+	Data     []interface{} `json:"data"`
 }
 
 // NewPlotData returns a pointer to a new PlotData
-func NewPlotData(title string, data []interface{}) *PlotData {
+func NewPlotData(title string, unitType string, data []interface{}) *PlotData {
 	return &PlotData{
-		Title: title,
-		Data:  data,
+		Title:    title,
+		UnitType: unitType,
+		Data:     data,
 	}
 }
