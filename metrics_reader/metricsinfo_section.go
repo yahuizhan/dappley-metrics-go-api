@@ -2,35 +2,21 @@ package metricsreader
 
 // MetricsInfoSection formulates data in a way that is easy to plot
 type MetricsInfoSection struct {
-	Consts map[string]float64 `json:"consts"`
-	Plots  []*PlotData        `json:"plots"`
+	Consts []*Constant `json:"consts"`
+	Plots  []*PlotData `json:"plots"`
 }
 
 // NewMetricsInfoSection initializes a new object of MetricsInfoSection
 func NewMetricsInfoSection() *MetricsInfoSection {
 	return &MetricsInfoSection{
-		Consts: make(map[string]float64),
+		Consts: nil,
 		Plots:  nil,
 	}
 }
 
 // SetConsts sets value to MetricsInfoSection.Consts
-func (miSection *MetricsInfoSection) SetConsts(csvData []interface{}) {
-	if len(csvData) < 2 {
-		return
-	}
-	titles := csvData[0].([]string)
-	for i := 1; i < len(csvData); i++ {
-		dataRow := csvData[i].([]*float64)
-		for idx, title := range titles {
-			if dataRow[idx] != nil {
-				miSection.Consts[title] = *(dataRow[idx])
-			}
-		}
-		if len(miSection.Consts) == len(titles) {
-			break
-		}
-	}
+func (miSection *MetricsInfoSection) SetConsts(constants []*Constant) {
+	miSection.Consts = constants
 }
 
 // SetPlotData sets value to MetricsInfoSection.PlotData
@@ -38,7 +24,23 @@ func (miSection *MetricsInfoSection) SetPlotData(plotData []*PlotData) {
 	miSection.Plots = plotData
 }
 
-// PlotData contains title and data of one plot
+// Constant contains unit and value of a constant metrics
+type Constant struct {
+	Title    string  `json:"title"`
+	UnitType string  `json:"unitType"`
+	Value    float64 `json:"value"`
+}
+
+// NewConstant returns a pointer to a new Constant
+func NewConstant(title string, unitType string, value float64) *Constant {
+	return &Constant{
+		Title:    title,
+		UnitType: unitType,
+		Value:    value,
+	}
+}
+
+// PlotData contains title, data unit and data of one plot
 type PlotData struct {
 	Title    string        `json:"title"`
 	UnitType string        `json:"unitType"`

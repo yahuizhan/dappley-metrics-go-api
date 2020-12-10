@@ -96,7 +96,7 @@ func removeFirstPrefix(title string, delim string) string {
 	return strings.Join(secs[1:], delim)
 }
 
-// subset 'arr' by indices given in 'indices'; if index in 'indices' is out of range of 'arr', it gets ignored
+// subset arr by indices given in indices; if index in indices is out of range of arr, it gets ignored
 func subsetArrByIndicesAndConvertToFloat(arr []string, indices []int) ([]*float64, error) {
 	if arr == nil {
 		return nil, errArrNil
@@ -136,4 +136,31 @@ func SubsetDataArrByTime(csvArr [][]string, fromtime int) ([][]string, error) {
 		}
 	}
 	return res, nil
+}
+
+// ReadConstant returns the first non-nil value of data specified by columnTitle from csvTable
+func ReadConstant(csvTable [][]string, columnTitle string) (float64, error) {
+	constants, err := GetColumnsInFloat(csvTable, []string{columnTitle})
+	if err != nil {
+		return -1, err
+	}
+	if len(constants) < 2 {
+		return -1, errNotEnoughDataInCSV
+	}
+	titleLine := constants[0].([]string)
+	if len(titleLine) == 0 {
+		return -1, errNotEnoughDataInCSV
+	}
+	var data float64
+	for i := 1; i < len(constants); i++ {
+		dataline := constants[i].([]*float64)
+		if len(dataline) == 0 {
+			return -1, errNotEnoughDataInCSV
+		}
+		if dataline[0] != nil {
+			data = *(dataline[0])
+			break
+		}
+	}
+	return data, nil
 }

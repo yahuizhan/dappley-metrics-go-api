@@ -6,9 +6,15 @@ import (
 
 var allSections []string = []string{"Block", "CPU", "Disk", "Memory", "Network", "Transaction Request"}
 
-var constantFieldsMap = map[string][]string{
-	"cpu":    {"cpu:totalCoreNum"},
-	"memory": {"memory:systemMem"},
+type constantInfo struct {
+	title     string // title of the constant field
+	unitType  string // unit type of plot; can be one of {"number", "bytes", "percentage"}
+	csvColumn string // data column from csv to get data
+}
+
+var constantFieldsMap = map[string][]constantInfo{
+	"CPU":    {constantInfo{"Total Number of Cores", "number", "cpu:totalCoreNum"}},
+	"Memory": {constantInfo{"System Memory", "bytes", "memory:systemMem"}},
 }
 
 type plotInfo struct {
@@ -111,13 +117,15 @@ func FormMetricsInfoResponse(filepath string, fromtime int) *MetricsInfoResponse
 
 func (response *MetricsInfoResponse) formResponseData(csvArr [][]string) error {
 	for section, plotInfoArr := range plotDataMap {
-		if len(constantFieldsMap[section]) > 0 {
-			constants, err := csvhandler.GetColumnsInFloat(csvArr, constantFieldsMap[section])
+		allConstants := make([]*Constant, len(constantFieldsMap[section]))
+		for idx, constantinfo := range constantFieldsMap[section] {
+			value, err := csvhandler.ReadConstant(csvArr, constantinfo.csvColumn)
 			if err != nil {
 				return err
 			}
-			response.Content[section].SetConsts(constants)
+			allConstants[idx] = NewConstant(constantinfo.title, constantinfo.unitType, value)
 		}
+		response.Content[section].SetConsts(allConstants)
 
 		allPlotData := make([]*PlotData, len(plotInfoArr))
 		for idx, plotinfo := range plotInfoArr {
