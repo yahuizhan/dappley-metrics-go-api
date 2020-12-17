@@ -35,7 +35,7 @@ var plotDataMap = map[string][]plotInfo{
 	"Disk": {
 		//plotInfo{"Bytes Read from Disk", "bytes", []string{"time", "disk:readBytes"}},
 		//plotInfo{"Bytes Written to Disk", "bytes", []string{"time", "disk:writeBytes"}},
-		plotInfo{"Disk Used", "bytes", []string{"time", "disk:used"}},
+		plotInfo{"Disk Usage of db", "bytes", []string{"time", "disk:used"}},
 		//plotInfo{"Percentage Of Disk Used", "percentage", []string{"time", "disk:usedPercent"}},
 		//plotInfo{"Change In Disk Used", "number", []string{"time", "disk:UsedChange"}},
 	},
