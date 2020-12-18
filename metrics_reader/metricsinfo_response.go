@@ -33,11 +33,12 @@ var plotDataMap = map[string][]plotInfo{
 		plotInfo{"Total CPU Percentage of All Processes", "percentage", []string{"time", "cpu:totalProcessCpuPercent"}},
 	},
 	"Disk": {
-		//plotInfo{"Bytes Read from Disk", "bytes", []string{"time", "disk:readBytes"}},
-		//plotInfo{"Bytes Written to Disk", "bytes", []string{"time", "disk:writeBytes"}},
-		plotInfo{"Disk Usage of db", "bytes", []string{"time", "disk:used"}},
-		//plotInfo{"Percentage Of Disk Used", "percentage", []string{"time", "disk:usedPercent"}},
-		//plotInfo{"Change In Disk Used", "number", []string{"time", "disk:UsedChange"}},
+		plotInfo{"Bytes Read from Disk", "bytes", []string{"time", "disk:readBytes"}},
+		plotInfo{"Bytes Written to Disk", "bytes", []string{"time", "disk:writeBytes"}},
+		plotInfo{"Disk Usage of db", "bytes", []string{"time", "disk:dbUsed"}},
+		plotInfo{"Disk Used", "bytes", []string{"time", "disk:used"}},
+		plotInfo{"Percentage Of Disk Used", "percentage", []string{"time", "disk:usedPercent"}},
+		plotInfo{"Change In Disk Used", "number", []string{"time", "disk:UsedChange"}},
 	},
 	"Memory": {
 		plotInfo{"Memory In Use By Current Process", "bytes", []string{"time", "memory:currentProcessMemInUse"}},
